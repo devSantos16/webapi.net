@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using webapi.net.models;
+using webapi.net;
+
 
 namespace webapi.net.Controllers
 {
@@ -20,10 +23,10 @@ namespace webapi.net.Controllers
             };
             return Ok(obj);
         }
-        [HttpGet("Apresentar/{nome}")]
-        public IActionResult Apresentar(string nome)
+        [HttpGet("Apresentar")]
+        public IActionResult Apresentar() 
         {
-            return Ok(new {nome});
+            return Ok(new RandomPerson());
         }
-    }
+}
 }
