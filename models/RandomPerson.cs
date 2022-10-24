@@ -3,39 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using webapi.net;
+using webapi.net.Context;
 
 namespace webapi.net.models
 {
     public class RandomPerson : Person
     {
         private Random rand = new Random();
-        public RandomPerson()
+        
+        public RandomPerson(PersonContext context)
         {
-            this.Name = Util.GenerateRandomElementString(GetListName());
-            this.LastName = Util.GenerateRandomElementString(GetListLastName());
-            this.BirthDate = Convert.ToString(RandomDay().ToString("dd/MM/yyyy"));
+            int count = context.Persons.Count();
+
+            this.Name = context.Persons.Find(GetRandomPersonTOID(count + 1)).Name;
+            this.LastName = context.Persons.Find(GetRandomPersonTOID(count + 1)).LastName;
+            this.BirthDate = context.Persons.Find(GetRandomPersonTOID(count + 1)).BirthDate;
             this.Sex = GetRandomSex();
         }
-        private List<string> GetListName()
+
+        protected int GetRandomPersonTOID(int count)
         {
-            return new List<string>() {
-                "Caio",
-                "Kalel",
-                "Emanuel",
-                "Douglas",
-                "Gabriel",
-            };
+            int pos = rand.Next(count);
+            return pos;
         }
 
-        private List<string> GetListLastName()
-        {
-            return new List<string>(){
-                "Barbosa Valenti",
-                "Dos Santos Paz",
-                "Silvano Lisboa",
-                "Augusto Oliveira Henzel"
-            };
-        }
         protected char GetRandomSex()
         {
             char[] arrayChar = new char[2];
@@ -45,7 +36,6 @@ namespace webapi.net.models
 
             int pos = rand.Next(arrayChar.Count());
             return arrayChar[pos];
-
         }
         DateTime RandomDay()
         {
